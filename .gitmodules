@@ -1,0 +1,3 @@
+[submodule "botplugins"]
+	path = botplugins
+	url = git@github.com:Qwerty-Space/AntiDeletedAccountsBot.git
