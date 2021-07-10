@@ -8,7 +8,9 @@ from sys import argv
 from uniborg import Uniborg
 import config
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='[%(levelname) 5s/%(asctime)s]%(name)s: %(message)s ',
+                    level=logging.INFO)
+
 try:
     session_name = argv[1].replace(".session", "")
 except IndexError:
