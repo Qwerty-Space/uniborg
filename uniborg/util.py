@@ -16,6 +16,8 @@ from collections import defaultdict
 
 
 from telethon import events
+from telethon.utils import add_surrogate
+from telethon.tl.types import MessageEntityPre
 from telethon.tl.functions.messages import GetPeerDialogsRequest
 
 
@@ -168,3 +170,14 @@ async def send_replacement_message(event, *args, **kwargs):
         raise ValueError("reply_to must not be provided")
     kwargs['reply_to'] = event.message.reply_to_msg_id
     return await event.respond(*args, **kwargs)
+
+
+def parse_pre(text):
+    """
+    Parser (for parse_mode) that makes everything monospace
+    """
+    text = text.strip()
+    return (
+        text,
+        [MessageEntityPre(offset=0, length=len(add_surrogate(text)), language='')]
+    )
