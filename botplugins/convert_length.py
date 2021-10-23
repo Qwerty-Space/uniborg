@@ -78,6 +78,8 @@ async def length(event):
         result = round(float(value)*units[unitfrom]/units[unitto], 3)
     except ValueError:
         pass
+    except KeyError:
+        return
 
     plural_from = plural(unitfrom, float(value))
     plural_to = plural(unitto, result)
