@@ -6,7 +6,7 @@ Plugin gets triggered by a standalone message in the form of `{number} {length1}
 Use /lengths to list accepted weight units.
 
 patterns: 
-`(?i)(\d+(?:(?:\.|,)\d+)?)? ?((?:[ckm]?m(?:et(?:er|re)s?)?|inch(?:es)?|f[oe]+t|(?:banana|yard|mile|parsec)s?|au|ly)) (?:to|in) ((?:[ckm]?m(?:et(?:er|re)s?)?|inch(?:es)?|f[oe]+t|(?:banana|yard|mile|parsec)s?|au|ly))$$`
+`(?i)(\d+(?:[\.,]\d+)?)? ?((?:[ckm]?m(?:et(?:er|re)s?)?|in(?:ch(?:es)?)?|f[oe]*t|(?:banana|yard|mile|parsec)s?|au|ly)) (?:to|in) ((?:[ckm]?m(?:et(?:er|re)s?)?|in(?:ch(?:es)?)?|f[oe]*t|(?:banana|yard|mile|parsec)s?|au|ly))$`
 `/lengths`
 """
 
