@@ -1,13 +1,13 @@
-r"""Convert Distances
+r"""Convert lengths
 
-Convert distances to other common distances. 
-Plugin gets triggered by a standalone message in the form of `{number} {distance1} in/to {distance2}`
+Convert lengths to other common lengths. 
+Plugin gets triggered by a standalone message in the form of `{number} {length1} in/to {length2}`
 
-Use /distances to list accepted weight units.
+Use /lengths to list accepted weight units.
 
 patterns: 
 `(?i)(\d+(?:(?:\.|,)\d+)?)? ?((?:[ckm]?m(?:et(?:er|re)s?)?|inch(?:es)?|f[oe]+t|(?:banana|yard|mile|parsec)s?|au|ly)) (?:to|in) ((?:[ckm]?m(?:et(?:er|re)s?)?|inch(?:es)?|f[oe]+t|(?:banana|yard|mile|parsec)s?|au|ly))$$`
-`/distances`
+`/lengths`
 """
 
 from telethon import events
@@ -31,15 +31,13 @@ units = {
 
 
 def singular(unit):
-    if len(unit) < 3:
-        return unit
-    if "inch" in unit:
+    if unit.startswith("in"):
         return "inch"
     if "met" in unit:
         return "m"
     if unit.endswith("s"):
         return unit[:-1]
-    if "feet" in unit:
+    if unit in ["feet", "ft"]:
         return "foot"
 
     return unit
@@ -50,20 +48,18 @@ def plural(unit, amount):
         return unit
     if len(unit) < 3:
         return unit
-    if unit not in ["foot", "inch"]:
-        return unit + "s"
     if "foot" in unit:
         return "feet"
     if "inch" in unit:
         return "inches"
 
-    return unit
+    return unit + "s"
 
 
 @borg.on(events.NewMessage(
-    pattern=r"(?i)(\d+(?:[\.,]\d+)?)? ?((?:[ckm]?m(?:et(?:er|re)s?)?|inch(?:es)?|f[oe]+t|(?:banana|yard|mile|parsec)s?|au|ly)) (?:to|in) ((?:[ckm]?m(?:et(?:er|re)s?)?|inch(?:es)?|f[oe]+t|(?:banana|yard|mile|parsec)s?|au|ly))$"
+    pattern=r"(?i)(\d+(?:[\.,]\d+)?)? ?((?:[ckm]?m(?:et(?:er|re)s?)?|in(?:ch(?:es)?)?|f[oe]*t|(?:banana|yard|mile|parsec)s?|au|ly)) (?:to|in) ((?:[ckm]?m(?:et(?:er|re)s?)?|in(?:ch(?:es)?)?|f[oe]*t|(?:banana|yard|mile|parsec)s?|au|ly))$"
 ))
-async def distance(event):
+async def length(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:
         return
@@ -89,14 +85,14 @@ async def distance(event):
     await event.reply(f"**{value} {plural_from} is:**  `{result} {plural_to}`")
 
 
-@borg.on(borg.cmd(r"distances$"))
+@borg.on(borg.cmd(r"lengths$"))
 @cooldown(60)
-async def list_distances(event):
+async def list_lengths(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:
         return
 
-    text = f"**List of supported distance units:**\n" + ", ".join(sorted(units.keys()))
+    text = f"**List of supported length units:**\n" + ", ".join(sorted(units.keys()))
     await event.reply(text)
 
 @borg.on(borg.blacklist_plugin())
