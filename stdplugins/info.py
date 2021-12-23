@@ -4,20 +4,14 @@
 """
 Show all .info about the replied message
 """
+from uniborg.util import parse_pre
+
 from telethon import events
-from telethon.utils import add_surrogate
-from telethon.tl.types import MessageEntityPre, DocumentAttributeFilename
+from telethon.tl.functions.channels import GetParticipantRequest
+from telethon.tl.types import InputPeerChannel, User, DocumentAttributeFilename
 from telethon.tl.tlobject import TLObject
-from telethon.errors import MessageTooLongError
+from telethon.errors.rpcerrorlist import UserNotParticipantError, MessageTooLongError
 import datetime
-
-
-def parse_pre(text):
-    text = text.strip()
-    return (
-        text,
-        [MessageEntityPre(offset=0, length=len(add_surrogate(text)), language='')]
-    )
 
 
 def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
@@ -42,7 +36,7 @@ def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
         for k, v in items:
             if k == '_' or v is None:
                 continue
-            formatted = yaml_format(v, indent)
+            formatted = yaml_format(v, indent, max_str_len, max_byte_len)
             if not formatted.strip():
                 continue
             result.append(' ' * (indent if has_multiple_items else 1))
@@ -76,7 +70,7 @@ def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
         result.append('\n')
         indent += 2
         for x in obj:
-            result.append(f"{' ' * indent}- {yaml_format(x, indent + 2)}")
+            result.append(f"{' ' * indent}- {yaml_format(x, indent + 2, max_str_len, max_byte_len)}")
             result.append('\n')
         result.pop()
         indent -= 2
@@ -86,16 +80,19 @@ def yaml_format(obj, indent=0, max_str_len=256, max_byte_len=64):
     return ''.join(result)
 
 
-@borg.on(events.NewMessage(pattern=r"\.info", outgoing=True))
+@borg.on(borg.cmd("info"))
 async def _(event):
     if not event.message.is_reply:
+        await who(event)
         return
     msg = await event.message.get_reply_message()
     yaml_text = yaml_format(msg)
+    action = event.edit if not borg.me.bot else event.respond
     try:
-        await event.edit(yaml_text, parse_mode=parse_pre)
+        await action(yaml_text, parse_mode=parse_pre)
     except MessageTooLongError:
-        await event.delete()
+        if not borg.me.bot:
+            await event.delete()
         yaml_text = yaml_format(
             msg,
             max_str_len=9999,
@@ -110,3 +107,38 @@ async def _(event):
             ],
             allow_cache=False
         )
+
+
+@borg.on(borg.cmd("who"))
+async def who(event):
+    participant = None
+    if not event.message.is_reply:
+        who = await event.get_chat()
+    else:
+        msg = await event.message.get_reply_message()
+        if msg.forward:
+            if msg.forward.from_name is not None:
+                who = msg.forward.original_fwd
+            else:
+                who = await borg.get_entity(
+                    msg.forward.sender_id or msg.forward.chat_id)
+        else:
+            who = await msg.get_sender()
+            ic = await event.get_input_chat()
+            if who is None:
+                who = await event.get_chat()
+            elif (isinstance(ic, InputPeerChannel) and
+                    isinstance(who, User)):
+                try:
+                    participant = (await borg(GetParticipantRequest(
+                        ic,
+                        who
+                    ))).participant
+                except UserNotParticipantError:
+                    pass
+    yaml_text = yaml_format(who)
+    if participant is not None:
+        yaml_text += "\n"
+        yaml_text += yaml_format(participant)
+    action = event.edit if not borg.me.bot else event.respond
+    await action(yaml_text, parse_mode=parse_pre)
