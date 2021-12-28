@@ -170,18 +170,19 @@ async def recall_quote(event):
 
     id = choice(match_quotes)
     quote = quotes[chat][id]
-    msg = await event.respond(format_quote(id, quote, True), parse_mode="html")
+    reply_msg = await event.get_reply_message()
+    msg = await event.respond(format_quote(id, quote, True), parse_mode="html", reply_to=reply_msg)
     await sleep(0.5)
     await msg.edit(format_quote(id, quote), parse_mode="html")
 
     try:
-        await sleep(60)
+        await sleep(5)
         await event.delete()
     except:
         pass
 
 
-@borg.on(borg.cmd(r"(ql|listquotes?)"))
+@borg.on(borg.cmd(r"(lq|listquotes?)"))
 async def prelist_quotes(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:
