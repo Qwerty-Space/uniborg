@@ -168,7 +168,7 @@ async def recall_quote(event):
     reply_msg = await event.get_reply_message()
     msg = await event.respond(format_quote(id, quote, True, max_text_len=3000), parse_mode="html", reply_to=reply_msg)
     await sleep(0.5)
-    await msg.edit(format_quote(id, quote, max_text_len=3000), parse_mode="html")
+    await msg.edit(format_quote(id, quote, max_text_len=3000, chat_id=chat), parse_mode="html")
 
     try:
         await sleep(5)
@@ -308,7 +308,7 @@ def fetch_quotes_near(chat_id, quote_id, count=8, before=False):
     return formatted, fmt_range, match_ids
 
 
-def format_quote(id, quote, only_text=False, max_text_len=250):
+def format_quote(id, quote, only_text=False, max_text_len=250, chat_id=None):
     text = quote["text"]
     if len(text) > max_text_len:
         text = f"{text[:max_text_len]}…"
@@ -321,7 +321,11 @@ def format_quote(id, quote, only_text=False, max_text_len=250):
     msg_date = (quote["date"]).strftime("%B, %Y")
 
     formatted += f"\n<i>- <a href='tg://user?id={sender.id}'>{sender_name}</a>, "
-    formatted += f"<a href='t.me/share/url?url=%2Frecall+{id}'>{msg_date}</a></i>"
+    if not chat_id:
+        formatted += f"<a href='t.me/share/url?url=%2Frecall+{id}'>{msg_date}</a></i>"
+        return formatted
+
+    formatted += f"<a href='t.me/c/{chat_id[4:]}/{id}'>{msg_date}</a></i>"
 
     return formatted
 
