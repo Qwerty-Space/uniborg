@@ -7,7 +7,7 @@ Quotes are recalled with the text, the sender's name, and date it was originally
 patterns:
  • `q(uote)?|cite`
  • `(r(ecall)?|(get|fetch)quote)(?: ([\s\S]+))?`
- • `ql|listquotes?`
+ • `lq|listquotes?`
 ADMIN ONLY:
  • `rmq(uote)? (\d+)(?:\:(\d+))?`
 """
@@ -49,12 +49,7 @@ async def add_quote(event):
 
     chat = str(event.chat_id)
     if not event.is_reply:
-        amnt = len(storage.quotes[chat])
-
-        await event.reply(
-            f"There are `{amnt}` quotes saved for this group."
-            + "\nReply to a message with `/quote` to cite that message, "
-            + "and `/recall` to recall.")
+        await prelist_quotes(event)
         return
 
     reply_msg = await event.get_reply_message()
@@ -171,9 +166,9 @@ async def recall_quote(event):
     id = choice(match_quotes)
     quote = quotes[chat][id]
     reply_msg = await event.get_reply_message()
-    msg = await event.respond(format_quote(id, quote, True), parse_mode="html", reply_to=reply_msg)
+    msg = await event.respond(format_quote(id, quote, True, max_text_len=3000), parse_mode="html", reply_to=reply_msg)
     await sleep(0.5)
-    await msg.edit(format_quote(id, quote), parse_mode="html")
+    await msg.edit(format_quote(id, quote, max_text_len=3000), parse_mode="html")
 
     try:
         await sleep(5)
@@ -204,7 +199,9 @@ async def prelist_quotes(event):
 
     await event.reply(
         f"There are `{len(quotes[chat])}` quotes saved for this group"
-        "\nPress the button below to view all the saved quotes",
+        "\nReply to a message with `/quote` to cite that message, "
+        "and `/recall` to recall."
+        "\n\nAlternatively, press the button below to view all the saved quotes",
         buttons=[[
             types.KeyboardButtonCallback("View quotes", button_data)
         ]]
