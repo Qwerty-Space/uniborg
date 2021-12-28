@@ -32,6 +32,10 @@ def cooldown(timeout, chat=True):
             current_time = time()
             if current_time - last_called[medium] < timeout:
                 time_left = round(timeout - (current_time - last_called[medium]), 1)
+                try:
+                    await event.delete()
+                except:
+                    pass
                 return
             last_called[medium] = current_time
             return await function(event, *args, **kwargs)
