@@ -53,7 +53,6 @@ async def yes_or_no(event):
     if event.chat_id in blacklist:
         return
 
-    print(event.pattern_match.string)
     if not (event.pattern_match.string).startswith("/8ball"):
         await event.reply(choice(("Yes.", "No.")))
         return
