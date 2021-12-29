@@ -20,7 +20,7 @@ from telethon.tl.functions.messages import GetPeerDialogsRequest
 
 
 # Cooldown in seconds
-def cooldown(timeout, chat=True):
+def cooldown(timeout, chat=True, delete=False):
     def wrapper(function):
         last_called = defaultdict(int)
 
@@ -32,6 +32,8 @@ def cooldown(timeout, chat=True):
             current_time = time()
             if current_time - last_called[medium] < timeout:
                 time_left = round(timeout - (current_time - last_called[medium]), 1)
+                if not delete:
+                    return
                 try:
                     await event.delete()
                 except:
