@@ -77,7 +77,7 @@ async def random_slap(event, slapper, slapee):
 
 
 @borg.on(borg.cmd(r"(?:slap|kicc|bam|yeet)$"))
-@cooldown(10)
+@cooldown(10, delete=True)
 async def slap(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:

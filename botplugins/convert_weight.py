@@ -54,7 +54,7 @@ async def weight(event):
 
 
 @borg.on(borg.cmd(r"weights$"))
-@cooldown(60)
+@cooldown(60, delete=True)
 async def list_weights(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:

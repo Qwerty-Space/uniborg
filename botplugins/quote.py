@@ -38,7 +38,7 @@ quote_list_auths = set()
 
 
 @borg.on(borg.cmd(r"(q(uote)?|cite)"))
-@cooldown(15)
+@cooldown(15, delete=True)
 async def add_quote(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:
@@ -96,7 +96,6 @@ async def add_quote(event):
 
 
 @borg.on(borg.admin_cmd(r"rmq(?:uote)?", r"(\d+)(?:\:(\-?\d+))?"))
-@cooldown(5)
 async def rm_quote(event):
     match = event.pattern_match
     query_id = match.group(1)
@@ -113,7 +112,7 @@ async def rm_quote(event):
 
 
 @borg.on(borg.cmd(r"(r(ecall)?|(get|fetch)quote)(?: (?P<phrase>[\s\S]+))?"))
-@cooldown(10)
+@cooldown(10, delete=True)
 async def recall_quote(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:

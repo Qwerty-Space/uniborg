@@ -88,7 +88,7 @@ async def length(event):
 
 
 @borg.on(borg.cmd(r"lengths$"))
-@cooldown(60)
+@cooldown(60, delete=True)
 async def list_lengths(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:

@@ -15,7 +15,7 @@ from telethon import client, events, errors
 
 
 @borg.on(borg.cmd(r"roll ((?:\d*d\d+\s*)+)$"))
-@cooldown(10)
+@cooldown(10, delete=True)
 async def on_roll(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:

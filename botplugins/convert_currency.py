@@ -65,7 +65,7 @@ async def currency(event):
 
 
 @borg.on(borg.cmd(r"currencies$"))
-@cooldown(60)
+@cooldown(60, delete=True)
 async def list_currencies(event):
     blacklist = storage.blacklist or set()
     if event.chat_id in blacklist:
