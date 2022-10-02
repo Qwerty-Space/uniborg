@@ -39,7 +39,13 @@ class RedditVideoParser(HTMLParser):
         self = cls()
         async with session.get(link) as resp:
             self.feed(await req.text())
-        return self.og_video
+
+        if self.og_video:
+            m = re.match(r'https://v.redd.it/(\w+)', self.og_video)
+            if m:
+                return m.group(0)
+
+        return None
 
     def handle_starttag(self, tag, attrs):
         if tag == 'meta':
