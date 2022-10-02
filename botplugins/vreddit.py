@@ -51,14 +51,14 @@ def compress(f, output, out_thumb):
     print("compressed")
 
 
-async def vreddit(event, match):
+async def vreddit(event, links):
     vids = []
 
     check = await event.reply(f"Checking")
     async with aiohttp.ClientSession() as session:
-        for m in match:
-            await check.edit(f"Checking {match.index(m)+1}/{len(match)}")
-            async with session.get(m) as resp:
+        for i, link in enumerate(links, start=1):
+            await check.edit(f"Checking {i}/{len(links)}")
+            async with session.get(link) as resp:
                 url = resp.url
             async with session.get(url + ".json", headers={'User-Agent': f"{await generator()}"}) as resp:
                 post_json = await resp.json()
