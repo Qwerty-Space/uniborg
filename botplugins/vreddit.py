@@ -6,7 +6,7 @@ Downloads SFW `v.reddi.it` videos, and sends them back as a video.
 import os
 import string
 import asyncio
-import requests
+import aiohttp
 import subprocess
 import youtube_dl
 from time import time
@@ -55,20 +55,23 @@ async def vreddit(event, match):
     vids = []
 
     check = await event.reply(f"Checking")
-    for m in match:
-        await check.edit(f"Checking {match.index(m)+1}/{len(match)}")
-        url = requests.get(m).url
-        post_json = requests.get(url + ".json", headers={'User-Agent': f"{await generator()}"}).json()
-        over_18 = post_json[0]['data']['children'][0]['data']['over_18']
+    async with aiohttp.ClientSession() as session:
+        for m in match:
+            await check.edit(f"Checking {match.index(m)+1}/{len(match)}")
+            async with session.get(m) as resp:
+                url = resp.url
+            async with session.get(url + ".json", headers={'User-Agent': f"{await generator()}"}) as resp:
+                post_json = await resp.json()
+            over_18 = post_json[0]['data']['children'][0]['data']['over_18']
 
-        if over_18 and event.is_private or not over_18:
-            vids.append(m)
-        elif over_18 and not event.is_private:
-            me = (await event.client.get_me()).username
-            sub = re.sub(r"(?:https?\://)?v\.redd\.it/", "", m)
+            if over_18 and event.is_private or not over_18:
+                vids.append(m)
+            elif over_18 and not event.is_private:
+                me = (await event.client.get_me()).username
+                sub = re.sub(r"(?:https?\://)?v\.redd\.it/", "", m)
 
-            link = f"t.me/{me}?start=vreddit_{sub}"
-            await event.reply(f"[NSFW: click to view]({link})", link_preview=False)
+                link = f"t.me/{me}?start=vreddit_{sub}"
+                await event.reply(f"[NSFW: click to view]({link})", link_preview=False)
 
     await check.delete()
 
