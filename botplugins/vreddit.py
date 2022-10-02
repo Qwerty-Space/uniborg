@@ -37,7 +37,7 @@ class RedditVideoParser(HTMLParser):
     @classmethod
     async def get_og_video(cls, session, link):
         self = cls()
-        async with session.get(m) as resp:
+        async with session.get(link) as resp:
             self.feed(await req.text())
         return self.og_video
 
@@ -91,13 +91,13 @@ async def vreddit(event, video_links, reddit_links=None):
             over_18 = post_json[0]['data']['children'][0]['data']['over_18']
 
             if over_18 and event.is_private or not over_18:
-                vids.append(m)
+                vids.append(link)
             elif over_18 and not event.is_private:
                 me = (await event.client.get_me()).username
-                sub = re.sub(r"(?:https?\://)?v\.redd\.it/", "", m)
+                sub = re.sub(r"(?:https?\://)?v\.redd\.it/", "", link)
 
-                link = f"t.me/{me}?start=vreddit_{sub}"
-                await event.reply(f"[NSFW: click to view]({link})", link_preview=False)
+                tg_link = f"t.me/{me}?start=vreddit_{sub}"
+                await event.reply(f"[NSFW: click to view]({tg_link})", link_preview=False)
 
     await check.delete()
 
