@@ -85,7 +85,7 @@ async def vreddit(event, video_links, reddit_links=None):
         for i, link in enumerate(video_links, start=1):
             await check.edit(f"Checking {i}/{len(video_links)}")
             async with session.get(link) as resp:
-                url = resp.url
+                url = str(resp.url)
             async with session.get(url + ".json", headers={'User-Agent': f"{await generator()}"}) as resp:
                 post_json = await resp.json()
             over_18 = post_json[0]['data']['children'][0]['data']['over_18']
