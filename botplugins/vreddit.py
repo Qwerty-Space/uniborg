@@ -17,6 +17,7 @@ import concurrent.futures
 import re
 from telethon import events
 from uniborg.util import downscale, blacklist
+from html.parser import HTMLParser
 
 
 executor = concurrent.futures.ThreadPoolExecutor()
@@ -26,6 +27,26 @@ ytdl_opts = {
     "format": "best/bestvideo+bestaudio",
     "quiet": "true"
 }
+
+
+class RedditVideoParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.og_video = None
+
+    @classmethod
+    async def get_og_video(cls, session, link):
+        self = cls()
+        async with session.get(m) as resp:
+            self.feed(await req.text())
+        return self.og_video
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'meta':
+            attrs = dict(attrs)
+            if attrs.get('property') == 'og:video':
+                self.og_video = attrs['content']
+
 
 async def generator(size=randint(8,16)):
     chars = string.ascii_letters + string.digits
@@ -51,13 +72,18 @@ def compress(f, output, out_thumb):
     print("compressed")
 
 
-async def vreddit(event, links):
+async def vreddit(event, video_links, reddit_links=None):
     vids = []
 
     check = await event.reply(f"Checking")
     async with aiohttp.ClientSession() as session:
-        for i, link in enumerate(links, start=1):
-            await check.edit(f"Checking {i}/{len(links)}")
+        if reddit_links:
+            video_links.extend(filter(None, await asyncio.gather(*(
+                RedditVideoParser.get_og_video(session, link) for link in reddit_links
+            ))))
+
+        for i, link in enumerate(video_links, start=1):
+            await check.edit(f"Checking {i}/{len(video_links)}")
             async with session.get(link) as resp:
                 url = resp.url
             async with session.get(url + ".json", headers={'User-Agent': f"{await generator()}"}) as resp:
@@ -121,7 +147,7 @@ async def on_start_vid(event):
 
 
 @borg.on(events.NewMessage(pattern=re.compile(
-                                    r"(?i)(?:^|\s)((?:https?\://)?v\.redd\.it/\w+)").findall
+                                    r"(?i)(?:^|\s)((?:https?\://)?v\.redd\.it/\w+)|((?:https?\://)?(?:www\.)?reddit.com/r/\w+/comments/\w+/\S+)").finditer
                                     ))
 async def on_vreddit(event):
     blacklist = storage.blacklist or set()
@@ -134,7 +160,15 @@ async def on_vreddit(event):
     if fwd and (await fwd.get_sender()).is_self:
         return
     else:
-        await vreddit(event, event.pattern_match)
+        links = []
+        almost_links = []
+        for m in event.pattern_match:
+            if m.group(1):
+                links.append(m.group(1))
+            elif m.group(2):
+                almost_links.append(m.group(2))
+
+        await vreddit(event, links, almost_links)
 
 @borg.on(borg.blacklist_plugin())
 async def on_blacklist(event):
