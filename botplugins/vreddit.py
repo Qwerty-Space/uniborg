@@ -38,7 +38,7 @@ class RedditVideoParser(HTMLParser):
     async def get_og_video(cls, session, link):
         self = cls()
         async with session.get(link) as resp:
-            self.feed(await req.text())
+            self.feed(await resp.text())
 
         if self.og_video:
             m = re.match(r'https://v.redd.it/(\w+)', self.og_video)
