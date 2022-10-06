@@ -108,8 +108,8 @@ async def vreddit(event, video_links, reddit_links=None):
     await check.delete()
 
 
-    for v in vids:
-        dl_msg = await event.reply(f"Downloading... {match.index(v)+1}/{len(vids)}")
+    for i, v in enumerate(vids, start=1):
+        dl_msg = await event.reply(f"Downloading... {i}/{len(vids)}")
 
         try:
             now = str(time())
