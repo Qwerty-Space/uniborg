@@ -157,7 +157,7 @@ async def on_start_vid(event):
 
 
 
-@borg.on(events.NewMessage(pattern=find_matches(
+@borg.on(events.NewMessage(incoming=True, pattern=find_matches(
                                     r"(?i)(?:^|\s)((?:https?\://)?v\.redd\.it/\w+)|((?:https?\://)?(?:www\.)?reddit.com/r/\w+/comments/\w+/\S+)")
                                     ))
 async def on_vreddit(event):
