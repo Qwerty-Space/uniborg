@@ -59,6 +59,10 @@ async def generator(size=randint(8,16)):
     return "".join(choice(chars) for _ in range(size))
 
 
+def find_matches(regex):
+    return lambda text: list(re.compile(regex).finditer(text))
+
+
 def download(url):
     with youtube_dl.YoutubeDL(ytdl_opts) as ytdl:
         f = ytdl.extract_info(url)
@@ -152,8 +156,9 @@ async def on_start_vid(event):
     await vreddit(event, link)
 
 
-@borg.on(events.NewMessage(pattern=re.compile(
-                                    r"(?i)(?:^|\s)((?:https?\://)?v\.redd\.it/\w+)|((?:https?\://)?(?:www\.)?reddit.com/r/\w+/comments/\w+/\S+)").finditer
+
+@borg.on(events.NewMessage(pattern=find_matches(
+                                    r"(?i)(?:^|\s)((?:https?\://)?v\.redd\.it/\w+)|((?:https?\://)?(?:www\.)?reddit.com/r/\w+/comments/\w+/\S+)")
                                     ))
 async def on_vreddit(event):
     blacklist = storage.blacklist or set()
