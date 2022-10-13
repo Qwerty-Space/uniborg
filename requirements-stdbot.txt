@@ -3,3 +3,4 @@ hachoir
 requests
 youtube-dl
 pillow
+ffmpy
