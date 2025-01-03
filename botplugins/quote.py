@@ -316,7 +316,7 @@ def format_quote(id, quote, only_text=False, max_text_len=250, chat_id=None):
         return formatted
 
     sender = quote["sender"]
-    sender_name = html.escape(f"{sender.first_name} {sender.last_name or ''}")
+    sender_name = (html.escape(f"{sender.first_name} {sender.last_name or ''}")).strip()
     msg_date = (quote["date"]).strftime("%B, %Y")
 
     formatted += f"\n<i>- <a href='tg://user?id={sender.id}'>{sender_name}</a>, "
