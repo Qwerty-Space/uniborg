@@ -40,6 +40,9 @@ async def on_roll(event):
         if d.group(1):
             rolls = int(d.group(1))
 
+        if rolls < 1:
+            rolls = 1
+
         sides = int(d.group(2)) # how many "sides" the dice has
 
         ## limit the amount of rolls and sides
