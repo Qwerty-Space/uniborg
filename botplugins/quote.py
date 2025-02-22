@@ -176,6 +176,29 @@ async def recall_quote(event):
         pass
 
 
+@borg.on(events.NewMessage())
+async def random_chance_quote(event):
+    if randint(0, 1000) != 69:
+        return
+    blacklist = storage.blacklist or set()
+    if event.chat_id in blacklist:
+        return
+
+    if event.is_private:
+        return
+
+    chat = str(event.chat_id)
+    quotes = storage.quotes
+    match_quotes = list(quotes[chat].keys())
+    if not quotes[chat]:
+        return
+    id = choice(match_quotes)
+    quote = quotes[chat][id]
+    msg = await event.respond(format_quote(id, quote, True, max_text_len=3000), parse_mode="html")
+    await sleep(0.5)
+    await msg.edit(format_quote(id, quote, max_text_len=3000, chat_id=chat), parse_mode="html")
+
+
 @borg.on(borg.cmd(r"(lq|listquotes?)"))
 async def prelist_quotes(event):
     blacklist = storage.blacklist or set()
