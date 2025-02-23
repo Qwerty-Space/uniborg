@@ -29,7 +29,7 @@ units = {
 
 def singular(unit):
     if "3" in unit:
-        return f"{unit.rstrip("^3")}³"
+        return f"{unit.rstrip('^3')}³"
     if "cent" in unit:
         return "cm³"
     if "cubic metre" in unit:
