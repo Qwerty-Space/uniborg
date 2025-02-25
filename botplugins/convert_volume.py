@@ -1,13 +1,14 @@
-r"""Convert Weight
+r"""Convert Volume
 
-Convert weights to other common weights. 
-Plugin gets triggered by a standalone message in the form of `{number} {weight1} in/to {weight2}`
+Convert volumes to other common volumes. 
+Plugin gets triggered by a standalone message in the form of `{number} {volume1} in/to {volume2}`
 
-Use /weights to list accepted weight units.
+Use /volumes to list accepted volume units.
 
 patterns: 
-`(?i)^(\d+(?:(?:\.|,)\d+)?)? ?(k?g|ton(?:ne)?s?|lbs|oz|st(?:one)?) (?:to|in) (k?g|ton(?:ne)?s?|lbs|oz|st(?:one)?)$`
-`/weights`
+pattern_measurements: `(c?m\^?3|cubic (?:(?:centi)?metres?|f[eo]*t|inch(?:es)?)|barrels?|litres?|(?:uk|us|gb)? ?(?:gallon|pint)s?)`
+`(?i)^(\d+(?:(?:\.|,)\d+)?)? ?{pattern_measurements} (?:to|in) {pattern_measurements}$`
+`/volumes
 """
 
 from telethon import events
