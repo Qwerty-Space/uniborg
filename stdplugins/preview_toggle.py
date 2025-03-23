@@ -1,5 +1,5 @@
 """
-Toggles the webpage preview of a replied to/most recent message
+Use .p to toggle the webpage preview of a replied to/most recent message
 """
 
 from uniborg import util

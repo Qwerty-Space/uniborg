@@ -2,7 +2,17 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
-Enhances your markdown capabilities
+**Markdown**
+
+This plugin automatically reformats messages based on specific text patterns. It supports the following transformations:
+
+• ＡＥＳＴＨＥＴＩＣ Text (`a.. text ..`): Converts text to full-width Unicode characters.
+
+• 🅱️-Meme (`b.. text ..`): Replaces the first letter of each word with 🅱️.
+
+• Random Case (`c.. text ..`): Randomly capitalizes letters for a mocking effect.
+
+• Subreddit Links (`/r/subreddit` or `/u/username`): Converts subreddit and user mentions into clickable Reddit links.
 """
 import re
 from random import choice
