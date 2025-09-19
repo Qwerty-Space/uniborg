@@ -12,6 +12,8 @@ This plugin automatically reformats messages based on specific text patterns. It
 
 • Random Case (`c.. text ..`): Randomly capitalizes letters for a mocking effect.
 
+• Chopsticks ('ch.. text ..'): 匚囗几ソ乇尺て丂  て乇乂て  て囗  卂丂工卂几  匚卄卂尺卂匚て乇尺丂  て卄卂て  乚囗囗ㄑ  ソ卂已ひ乇乚ㄚ  乚工ㄑ乇  乚卂て工几  乚乇てて乇尺丂
+
 • Subreddit Links (`/r/subreddit` or `/u/username`): Converts subreddit and user mentions into clickable Reddit links.
 """
 import re
@@ -22,6 +24,24 @@ from telethon import events
 from telethon.tl.functions.messages import EditMessageRequest
 from telethon.utils import add_surrogate, del_surrogate
 from telethon.tl.types import MessageEntityTextUrl
+
+
+def parse_chopsticks(m):
+    alpha = "卂乃匚刀乇千已卄工丁ㄑ乚爪几囗尸冋尺丂てひソ山乂ㄚ乙"
+    mapped_chars= list()
+    print(m)
+    for c in (m.group(1)).upper():
+        if c == " ":
+            # make it two double width spaces
+            char = u"\u3000\u3000"
+        else:
+            index = ord(c) - 65
+            char = alpha[index]
+
+        mapped_chars.append(char)
+
+    print(''.join(mapped_chars))
+    return "".join(mapped_chars), None
 
 
 def parse_aesthetics(m):
@@ -59,6 +79,7 @@ MATCHERS = [
     (re.compile(r'b\.\.\s?(.+?)\.\.'), parse_b_meme),
     (re.compile(r'c\.\.\s?(.+?)\.\.'), parse_randcase),
     (re.compile(r'([^/\w]|^)(/?([ru]/\w+))'), parse_subreddit),
+    (re.compile(r'ch\.\.\s?(.+?)\.\.'), parse_chopsticks),
 ]
 
 
