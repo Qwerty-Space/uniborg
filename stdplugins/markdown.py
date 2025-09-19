@@ -29,7 +29,6 @@ from telethon.tl.types import MessageEntityTextUrl
 def parse_chopsticks(m):
     alpha = "卂乃匚刀乇千已卄工丁ㄑ乚爪几囗尸冋尺丂てひソ山乂ㄚ乙"
     mapped_chars= list()
-    print(m)
     for c in (m.group(1)).upper():
         if c == " ":
             # make it two double width spaces
@@ -40,7 +39,6 @@ def parse_chopsticks(m):
 
         mapped_chars.append(char)
 
-    print(''.join(mapped_chars))
     return "".join(mapped_chars), None
 
 
