@@ -24,6 +24,7 @@ positive_answers = [
     "It is decidedly so.",
     "Most likely.",
     "As I see it, yes.",
+    "This is the Way",
 ]
 
 neutral_answers = [
