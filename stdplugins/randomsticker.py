@@ -2,7 +2,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """
-Send a random .brain or .dab sticker
+Send a random sticker:
+• `.dab`:  Dabbing
+• `.brain`:  Supermind brain expansion thing
+• `.fp`:  Facepalm
+• `.hug`:  Hugs
+• `.pat`:  Headpats
 """
 import random
 
