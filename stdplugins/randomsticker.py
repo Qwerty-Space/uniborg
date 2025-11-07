@@ -9,7 +9,7 @@ import random
 from telethon import events, types, functions, utils
 
 
-def choser(cmd, pack, blacklist={}):
+def choser(cmd, packs, blacklist={}):
     docs = None
     @borg.on(events.NewMessage(pattern=rf'\.{cmd}', outgoing=True))
     async def handler(event):
@@ -17,18 +17,20 @@ def choser(cmd, pack, blacklist={}):
 
         nonlocal docs
         if docs is None:
-            docs = [
-                utils.get_input_document(x)
-                for x in (await
-                    borg(functions.messages.GetStickerSetRequest(types.InputStickerSetShortName(pack), hash=0))).documents
-                if x.id not in blacklist
-            ]
+            docs = []
+            for pack in packs:
+                res = await borg(functions.messages.GetStickerSetRequest(types.InputStickerSetShortName(pack), hash=0))
+                docs.extend(
+                    utils.get_input_document(x)
+                    for x in res.documents
+                    if x.id not in blacklist
+                )
 
         await event.respond(file=random.choice(docs), reply_to=event.reply_to_msg_id)
 
 
-choser('brain', 'supermind')
-choser('dab', 'DabOnHaters', {
+choser('brain', ['supermind'])
+choser('dab', ['DabOnHaters'], {
     1653974154589768377,
     1653974154589768312,
     1653974154589767857,
@@ -45,7 +47,33 @@ choser('dab', 'DabOnHaters', {
     1653974154589768677,
     1653974154589767120, # furry shit
 })
-choser('fp', 'facepalmstickers', {
+choser('fp', ['facepalmstickers'], {
     285892071401720411,
     285892071401725809
 })
+
+choser('hug', ['JurreHugs'] {
+    558487714329003463,
+    558487714329003569,
+    558487714329003571,
+})
+
+choser('pat', ['Patpackv4', 'PerplexedPat'], {
+    1066778402112930981,
+    1066778402112930658,
+    1066778402112930914,
+    1066778402112930949,
+    1066778402112931126,
+    1066778402112930946,
+    1066778402112930925,
+    1066778402112930919,
+    1066778402112930915,
+    1066778402112930958,
+    1066778402112930961,
+    1066778402112930968,
+    1066778402112931013,
+    1066778402112931163,
+    1066778402112931162,
+    1066778402112931023,
+})
+
