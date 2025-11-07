@@ -57,7 +57,7 @@ choser('fp', ['facepalmstickers'], {
     285892071401725809
 })
 
-choser('hug', ['JurreHugs'] {
+choser('hug', ['JurreHugs'], {
     558487714329003463,
     558487714329003569,
     558487714329003571,
