@@ -14,7 +14,7 @@ import random
 from telethon import events, types, functions, utils
 
 
-def choser(cmd, packs, blacklist={}):
+def chooser(cmd, packs, blacklist={}):
     docs = None
     @borg.on(events.NewMessage(pattern=rf'\.{cmd}', outgoing=True))
     async def handler(event):
@@ -34,8 +34,8 @@ def choser(cmd, packs, blacklist={}):
         await event.respond(file=random.choice(docs), reply_to=event.reply_to_msg_id)
 
 
-choser('brain', ['supermind'])
-choser('dab', ['DabOnHaters'], {
+chooser('brain', ['supermind'])
+chooser('dab', ['DabOnHaters'], {
     1653974154589768377,
     1653974154589768312,
     1653974154589767857,
@@ -52,19 +52,19 @@ choser('dab', ['DabOnHaters'], {
     1653974154589768677,
     1653974154589767120, # furry shit
 })
-choser('fp', ['facepalmstickers'], {
+chooser('fp', ['facepalmstickers'], {
     285892071401720411,
     285892071401725809
 })
 
-choser('hug', ['JurreHugs'], {
+chooser('hug', ['JurreHugs'], {
     558487714329003463,
     558487714329003569,
     558487714329003571,
     558487714329003450,
 })
 
-choser('pat', ['Patpackv4', 'PerplexedPat'], {
+chooser('pat', ['Patpackv4', 'PerplexedPat'], {
     1066778402112930981,
     1066778402112930658,
     1066778402112930914,
