@@ -1,2 +1,2 @@
-telethon
-jsonpickle
+telethon==1.4.0
+jsonpickle==1.5.0

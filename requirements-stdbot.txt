@@ -1,5 +1,7 @@
 CurrencyConverter
 hachoir
 requests
-youtube-dl
+urllib3<2
+aiohttp~=3.7.4.post0
 pillow
+ffmpy
