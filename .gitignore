@@ -12,3 +12,4 @@ data/
 stdplugins/test.py
 config.py
 log.txt
+/.python-version
