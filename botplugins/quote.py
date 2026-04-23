@@ -165,7 +165,7 @@ async def recall_quote(event):
     id = choice(match_quotes)
     quote = quotes[chat][id]
     reply_msg = await event.get_reply_message()
-    msg = await event.respond(format_quote(id, quote, True, max_text_len=3000), parse_mode="html", reply_to=reply_msg)
+    msg = await event.respond("Loading...", reply_to=reply_msg)
     await sleep(0.5)
     await msg.edit(format_quote(id, quote, max_text_len=3000, chat_id=chat), parse_mode="html")
 
