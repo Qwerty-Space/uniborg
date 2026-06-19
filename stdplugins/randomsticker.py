@@ -86,7 +86,7 @@ chooser('pat', ['Patpackv4', 'PerplexedPat'], {
     1066778402112930995,
 })
 
-chooser('uoh', ['JanniesOnSuicideWatch', 'uohhhhhh', 'uohhhhh'], {
+chooser('uoh', ['uohhhhhh', 'uohhhhh'], {
     5814695650683521701,
     6262543890776064752,
 })
