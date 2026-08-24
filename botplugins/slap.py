@@ -13,13 +13,12 @@ from uniborg.util import cooldown, blacklist
 
 slap_list = [
     # Minecraft:
-    "{slapper} slapped {slapee}!",
     "{slapee} walked into a cactus whilst trying to escape {slapper}.",
     "{slapee} was shot by an arrow.",
     "{slapee} was shot by {slapper}.",
     "{slapee} was roasted by {slapper}.",
     "{slapee} was roasted in dragon breath by {slapper}.",
-    "{slapee} drowned by {slapper}.",
+    "{slapee} was drowned by {slapper}.",
     "{slapee} was blown up by {slapper}.",
     "{slapee} fell from a high place.",
     "{slapee} was doomed to fall by {slapper}.",
@@ -43,6 +42,7 @@ slap_list = [
     "{slapee} is blasting off again!",
     # Games:
     "{slapee}'s mortality was clarified in a single strike.",
+    "{slapee}'s death was inevitable, yet unexpected."
     # Tech:
     "{slapee} experienced a kernel panic.",
     "{slapee} was infected with malware from an email {slapper} sent them.",
@@ -68,7 +68,8 @@ slap_list = [
     # Misc
     "{slapee} walked off a ledge.",
     "{slapper} sent {slapee} to swim with the fishes.",
-    "{slapee} forgot to breathe at the sight of {slapper}.",
+    "{slapper} sent {slapee} to swim with the fishies.",
+    "{slapper} slapped {slapee}!",
 ]
 
 
