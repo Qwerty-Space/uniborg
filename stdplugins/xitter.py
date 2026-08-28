@@ -16,7 +16,9 @@ domains = "|".join([
     "twittpr",
     "vxtwitter",
 
+    "mpregx",
     "boypussyx",
+    "boycuntx",
     "cunnyx",
     "furryfeetx",
     "girlcockx",
