@@ -1,5 +1,5 @@
 """
-Tag all admins with `.admins?`
+Tag all admins with `\.admins?`
 """
 
 import asyncio
@@ -7,7 +7,7 @@ from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
 
-@borg.on(events.NewMessage(pattern=r"[\.@]admins?$", outgoing=True))
+@borg.on(events.NewMessage(pattern=r"\.admins?$", outgoing=True))
 async def _(event):
     reply_msg = "@\u2063admin"
 
