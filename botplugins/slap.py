@@ -42,7 +42,7 @@ slap_list = [
     "{slapee} is blasting off again!",
     # Games:
     "{slapee}'s mortality was clarified in a single strike.",
-    "{slapee}'s death was inevitable, yet unexpected."
+    "{slapee}'s death was inevitable, yet unexpected.",
     # Tech:
     "{slapee} experienced a kernel panic.",
     "{slapee} was infected with malware from an email {slapper} sent them.",
