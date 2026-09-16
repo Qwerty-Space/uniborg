@@ -3,7 +3,7 @@
 Slaps a user the sender replies to, or if there's no reply the sender gets slapped.
 10 second cooldown.
 
-pattern: `pattern=r"/(?:slap|kicc|bam|yeet)$`
+pattern: `pattern=r"/(?:slap|kicc|bam|yeet|bonk)$`
 """
 from asyncio import sleep
 from random import choice
@@ -77,7 +77,7 @@ async def random_slap(event, slapper, slapee):
     return choice(slap_list).format(slapper=slapper, slapee=slapee)
 
 
-@borg.on(borg.cmd(r"(?:slap|kicc|bam|yeet)$"))
+@borg.on(borg.cmd(r"(?:slap|kicc|bam|yeet|bonk)$"))
 @cooldown(10, delete=True)
 async def slap(event):
     blacklist = storage.blacklist or set()
